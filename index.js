@@ -1,6 +1,7 @@
 var byline = require('byline');
 var express = require('express');
 var expressWs = require('express-ws');
+var handlers = require('./handlers');
 var opn = require('opn');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpack = require('webpack');
@@ -31,13 +32,11 @@ app.ws('/', function(ws, req) {
     while (ws.readyState == 1 /* open */) {
       var line = lineStream.read();
       if (line === null) break;
-      var lineString = line.toString('utf8');
-      var match = /^<<<html (.*) >>>/.exec(lineString);
-      if (match) {
-        ws.send(JSON.stringify({event: 'data', type: 'html', data: match[1]}));
-      } else {
-        ws.send(JSON.stringify({event: 'data', type: 'raw', data: lineString}));
-      }
+
+      handlers(line).forEach(function(item) {
+        item.event = 'data';
+        ws.send(JSON.stringify(item));
+      });
     }
   }
 });
