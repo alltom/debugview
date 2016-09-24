@@ -5,6 +5,13 @@ handlers.push({
   handler: function(match) { return [{type: 'html', data: match[1]}]; }
 });
 
+handlers.push({
+  matcher: /^tr (.*)/,
+  handler: function(match) {
+    return [{type: 'table', data: {type: 'row', cells: match[1].split(/\|/g)}}];
+  }
+});
+
 // Given a line, returns an array of {type: string, data: string}.
 module.exports = function(line) {
   var lineString = line.toString('utf8');
