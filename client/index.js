@@ -17,13 +17,15 @@ socket.onmessage = function(evt) {
 };
 
 function appendHtml(html) {
-  var li = document.createElement('li');
-  li.innerHTML = html;
-  document.body.appendChild(li);
+  var elem = document.createElement('div');
+	elem.className = 'log-item html';
+  elem.innerHTML = html;
+  document.body.appendChild(elem);
 }
 
 function appendText(text) {
-  var li = document.createElement('li');
-  li.appendChild(document.createTextNode(text))
-  document.body.appendChild(li);
+  var elem = document.createElement('div');
+	elem.className = 'log-item raw';
+  elem.appendChild(document.createTextNode(text))
+  document.body.appendChild(elem);
 }
