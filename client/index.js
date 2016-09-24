@@ -9,12 +9,20 @@ socket.onmessage = function(evt) {
   var data = JSON.parse(evt.data);
   if (data['event'] == 'end') {
     socket.close();
+  } else if (data.type == 'html') {
+    appendHtml(data.data);
   } else {
-    append(data.data);
+    appendText(data.data);
   }
 };
 
-function append(text) {
+function appendHtml(html) {
+  var li = document.createElement('li');
+  li.innerHTML = html;
+  document.body.appendChild(li);
+}
+
+function appendText(text) {
   var li = document.createElement('li');
   li.appendChild(document.createTextNode(text))
   document.body.appendChild(li);

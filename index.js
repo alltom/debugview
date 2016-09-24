@@ -14,7 +14,8 @@ var lineStream = byline.createStream(process.stdin, {keepEmptyLines: true});
 // Create a web server.
 var app = express();
 app.use(express.static('public'));
-app.use(webpackDevMiddleware(webpack(require('./webpack.config'))));
+app.use(webpackDevMiddleware(
+    webpack(require('./webpack.config')), {noInfo: true, quiet: true}));
 
 // Handle WebSocket connections.
 expressWs(app);
@@ -23,14 +24,20 @@ app.ws('/', function(ws, req) {
 
   lineStream.on('readable', read);
   lineStream.on('end', function() { ws.send(JSON.stringify({event: 'end'})); });
-	read();
+  read();
 
   function read() {
     // https://developer.mozilla.org/ja/docs/Web/API/WebSocket#Ready_state_constants
     while (ws.readyState == 1 /* open */) {
       var line = lineStream.read();
       if (line === null) break;
-      ws.send(JSON.stringify({data: line.toString('utf8')}));
+      var lineString = line.toString('utf8');
+      var match = /^<<<html (.*) >>>/.exec(lineString);
+      if (match) {
+        ws.send(JSON.stringify({event: 'data', type: 'html', data: match[1]}));
+      } else {
+        ws.send(JSON.stringify({event: 'data', type: 'raw', data: lineString}));
+      }
     }
   }
 });
