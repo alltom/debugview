@@ -2,10 +2,11 @@
   "name": "debugview",
   "version": "0.0.1",
   "description": "Language-agnostic debugging widgets based on print statements",
-  "main": "index.js",
   "keywords": [
     "debugging"
   ],
+  "main": "index.js",
+  "bin" : "./index.js",
   "author": "Tom Lieber <tom@alltom.com>",
   "license": "MIT",
   "dependencies": {

@@ -18,8 +18,8 @@ debugview lets you add special commands to your log statements that give you eas
 
 Just pipe your program through debugview. Your program's output will still show in the terminal, but it will launch a web browser that shows the same content with all the debugview commands interpreted as tables, bar charts, etc.
 
-    $ yourprogram | node index.js
+    $ yourprogram | debugview
 
 If you want to see it go, try an example:
 
-    $ node example01.js | node index.js
+    $ node example01.js | debugview
