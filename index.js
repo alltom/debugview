@@ -1,48 +1,22 @@
-var byline = require('byline');
+var BrowserDebugView = require('./browser-debug-view');
 var express = require('express');
 var expressWs = require('express-ws');
-var handlers = require('./handlers');
-var opn = require('opn');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpack = require('webpack');
 
-// Echo program's stdout to stdout.
-process.stdin.pipe(process.stdout);
-
-// The program's stdout as a stream of lines.
-var lineStream = byline.createStream(process.stdin, {keepEmptyLines: true});
-
 // Create a web server.
 var app = express();
+expressWs(app);  // Handle WebSocket connections.
 app.use(express.static('public'));
 app.use(webpackDevMiddleware(
     webpack(require('./webpack.config')), {noInfo: true, quiet: true}));
 
-// Handle WebSocket connections.
-expressWs(app);
-app.ws('/', function(ws, req) {
-  ws.on('close', function() { process.exit(); });
-
-  lineStream.on('readable', read);
-  lineStream.on('end', function() { ws.send(JSON.stringify({event: 'end'})); });
-  read();
-
-  function read() {
-    // https://developer.mozilla.org/ja/docs/Web/API/WebSocket#Ready_state_constants
-    while (ws.readyState == 1 /* open */) {
-      var line = lineStream.read();
-      if (line === null) break;
-
-      handlers(line).forEach(function(item) {
-        item.event = 'data';
-        ws.send(JSON.stringify(item));
-      });
-    }
-  }
-});
-
-// Listen for connections on any open port & open a web browser.
+// Listen for connections on any open port & show the debug view.
 var listener = app.listen(function() {
-  var addr = listener.address();
-  opn('http://[' + addr.address + ']:' + addr.port + '/');
+  // Echo program's stdout to stdout.
+  process.stdin.pipe(process.stdout);
+
+	// Open a debug view based on stdin.
+  var debugView = new BrowserDebugView(app, process.stdin);
+  debugView.open(listener);
 });
