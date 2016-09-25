@@ -51,7 +51,6 @@ var listener = app.listen(function() {
     process.stdin.pipe(process.stdout);
 
     // Open a debug view based on stdin.
-    var debugView = new BrowserDebugView(app, process.stdin);
-    debugView.open(listener);
+    new BrowserDebugView().open(app, listener, process.stdin);
   }
 });

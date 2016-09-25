@@ -5,19 +5,18 @@ var url = require('url');
 
 var nextViewerId = 1;
 
-// Browser-based log viewer. Serves itself from the given Express app.
-function BrowserDebugView(app, logInputStream) {
-  this._lineStream =
-      byline.createStream(logInputStream, {keepEmptyLines: true});
+// Browser-based log viewer.
+function BrowserDebugView() {
+  this._lineStream = null;
   this._webSocket = null;
   this._socketPath = '/view' + (nextViewerId++);
-
-  this._setupStreamHandlers();
-  this._setupExpressHandlers(app);
 }
 
-// Opens the debug view.
-BrowserDebugView.prototype.open = function(httpListener) {
+// Opens the debug view. Serves itself from the given Express app.
+BrowserDebugView.prototype.open = function(app, httpListener, logInputStream) {
+  this._setupStreamHandlers(logInputStream);
+  this._setupExpressHandlers(app);
+
   var addr = httpListener.address();
   opn(url.format({
     protocol: 'http',
@@ -28,7 +27,10 @@ BrowserDebugView.prototype.open = function(httpListener) {
   }));
 };
 
-BrowserDebugView.prototype._setupStreamHandlers = function() {
+BrowserDebugView.prototype._setupStreamHandlers = function(logInputStream) {
+  this._lineStream =
+      byline.createStream(logInputStream, {keepEmptyLines: true});
+
   this._lineStream.on('readable', this._read.bind(this));
   this._lineStream.on('end', function() {
     if (this._webSocket) {
