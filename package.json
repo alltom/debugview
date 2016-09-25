@@ -6,11 +6,13 @@
     "debugging"
   ],
   "main": "index.js",
-  "bin" : "./index.js",
+  "bin": "./index.js",
   "author": "Tom Lieber <tom@alltom.com>",
   "license": "MIT",
   "dependencies": {
     "byline": "^5.0.0",
+    "command-line-args": "^3.0.1",
+    "command-line-usage": "^3.0.3",
     "css-loader": "^0.25.0",
     "d3": "^4.2.6",
     "express": "^4.14.0",
