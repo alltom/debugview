@@ -1,5 +1,13 @@
 var handlers = {};
 
+handlers.raw = function(logItem, env) {
+  env.appendText(logItem.data);
+};
+
+handlers.html = function(logItem, env) {
+  env.appendHtml(logItem.data);
+};
+
 var tableElem = null;
 handlers.table = function(logItem, env) {
 	if (tableElem == null) {
@@ -18,14 +26,6 @@ handlers.table = function(logItem, env) {
 		td.appendChild(document.createTextNode(text));
 		return td;
 	}
-};
-
-handlers.html = function(logItem, env) {
-  env.appendHtml(logItem.data);
-};
-
-handlers.raw = function(logItem, env) {
-  env.appendText(logItem.data);
 };
 
 module.exports = function(logItem, env) {
