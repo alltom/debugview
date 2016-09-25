@@ -16,6 +16,8 @@ debugview lets you add special commands to your log statements that give you eas
 
 # Usage
 
+Install: `npm install -g debugview`
+
 Just pipe your program through debugview. Your program's output will still show in the terminal, but it will launch a web browser that shows the same content with all the debugview commands interpreted as tables, bar charts, etc.
 
     $ yourprogram | debugview
