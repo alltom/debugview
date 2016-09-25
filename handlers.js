@@ -1,14 +1,29 @@
 var handlers = [];
 
 handlers.push({
-  matcher: /^html (.*)/,
+  matcher: /^html (.+)/,
   handler: function(match) { return [{type: 'html', data: match[1]}]; }
 });
 
 handlers.push({
-  matcher: /^tr (.*)/,
+  matcher: /^tr (.+)/,
   handler: function(match) {
     return [{type: 'table', data: {type: 'row', cells: match[1].split(/\|/g)}}];
+  }
+});
+
+handlers.push({
+  matcher: /^bar (.+)/,
+  handler: function(match) {
+    var fields = match[1].trim().split(/ /);
+    var label = '', value;
+    if (fields.length == 1) {
+      value = parseFloat(fields[0]);
+    } else {
+      label = fields[0];
+      value = parseFloat(fields[1]);
+    }
+    return [{type: 'bar', data: {label: label, value: value}}];
   }
 });
 

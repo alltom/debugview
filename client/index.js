@@ -9,7 +9,6 @@ socket.onclose = function() {
 };
 socket.onmessage = function(evt) {
   var data = JSON.parse(evt.data);
-  console.log(data);
   if (data['event'] == 'end') {
     socket.close();
   } else {
