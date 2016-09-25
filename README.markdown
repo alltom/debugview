@@ -25,3 +25,7 @@ Just pipe your program through debugview. Your program's output will still show 
 If you want to see it go, try an example:
 
     $ node example01.js | debugview
+
+# The Future
+
+debugview barely exists. I wrote just enough to convince myself it could work, so it's pretty hacky and under-documented. See `TODO.markdown` for things I'm planning.
