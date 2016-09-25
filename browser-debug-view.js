@@ -1,12 +1,16 @@
 var byline = require('byline');
 var handlers = require('./handlers');
 var opn = require('opn');
+var url = require('url');
+
+var nextViewerId = 1;
 
 // Browser-based log viewer. Serves itself from the given Express app.
 function BrowserDebugView(app, logInputStream) {
   this._lineStream =
       byline.createStream(logInputStream, {keepEmptyLines: true});
   this._webSocket = null;
+  this._socketPath = '/view' + (nextViewerId++);
 
   this._setupStreamHandlers();
   this._setupExpressHandlers(app);
@@ -15,8 +19,13 @@ function BrowserDebugView(app, logInputStream) {
 // Opens the debug view.
 BrowserDebugView.prototype.open = function(httpListener) {
   var addr = httpListener.address();
-  // TODO: Don't assume IPv6.
-  opn('http://[' + addr.address + ']:' + addr.port + '/');
+  opn(url.format({
+    protocol: 'http',
+    hostname: addr.address,
+    port: addr.port,
+    pathname: '/',
+    query: {socketPath: this._socketPath}
+  }));
 };
 
 BrowserDebugView.prototype._setupStreamHandlers = function() {
@@ -29,8 +38,7 @@ BrowserDebugView.prototype._setupStreamHandlers = function() {
 };
 
 BrowserDebugView.prototype._setupExpressHandlers = function(app) {
-  // TODO: Use a more specific URL.
-  app.ws('/', function(ws, req) {
+  app.ws(this._socketPath, function(ws, req) {
     this._webSocket = ws;
     this._webSocket.on('close', function() { process.exit(); });
     this._read();

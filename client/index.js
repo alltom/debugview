@@ -1,6 +1,9 @@
 var handlers = require('./handlers');
+var url = require('url');
 
-var socket = new WebSocket('ws://' + window.location.host);
+var socketPath = url.parse(window.location.href, true /* parseQueryString */)
+                     .query.socketPath;
+var socket = new WebSocket('ws://' + window.location.host + socketPath);
 socket.onopen = function() {
   document.body.className = 'connected';
 };
