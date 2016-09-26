@@ -2,6 +2,10 @@ Documentation
 
 Treat input as a stream and find <<<>>> anywhere in it.
 
+Multiple tables, multiple graphs
+
+Named tables, named timelines, etc.
+
 More widgets:
 
 * Tree?
