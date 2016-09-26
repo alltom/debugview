@@ -5,7 +5,7 @@ Language-agnostic debugging widgets based on print statements.
 The idea is that you often use log statements while you're debugging, really lightweight stuff like `System.out.println("new value: " + val)` to make sure that your code does what you think it does. But because you print to a console, the "widgets" you can use are fairly primitive:
 
 * **Notification / status indicator.** Example (JavaScript): `console.log('loading data...')`
-* **List.** Example (Java): `list.stream().forEach(elt -> System.out.println(elt))`
+* **List.** Example (Java): `list.stream().forEach(System.out.println)`
 * **Table.** Example (OCaml): `List.iter (fun (a, b) -> print_endline (a ^ "\t" ^ b)) list`
 
 debugview lets you add special commands to your log statements that give you easy access to a broader widget library:
@@ -16,7 +16,7 @@ debugview lets you add special commands to your log statements that give you eas
 
 # Installation
 
-Install: `npm install -g debugview`
+    npm install -g debugview
 
 # Usage: Language-agnostic
 
