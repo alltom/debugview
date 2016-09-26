@@ -24,6 +24,7 @@ function push(data) {
 // TODO: console.error? console.dir? others?
 var log = console.log;
 console.log = function() {
-  log.apply(console, arguments);
+  var result = log.apply(console, arguments);
   push({data: Array.prototype.map.call(arguments, String).join(' ') + '\n'});
+  return result;
 };
