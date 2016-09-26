@@ -7,6 +7,8 @@ var expressWs = require('express-ws');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 
+var DEFAULT_REMOTE_PORT = 3009;
+
 var commandLineOptions = [
   {
     name: 'help',
@@ -20,7 +22,15 @@ var commandLineOptions = [
     type: Boolean,
     description:
         'Instead of reading stdin (the default), listen for WebSocket connections. Also prints information about how to connect via WebSockets.'
-  }
+  },
+  {
+    name: 'port',
+    alias: 'p',
+    type: Number,
+    description:
+        'Port the debug server will listen on. In remote mode, the default port is ' +
+        DEFAULT_REMOTE_PORT + '.'
+  },
 ];
 var options = commandLineArgs(commandLineOptions);
 
@@ -43,7 +53,8 @@ app.use(webpackDevMiddleware(
     webpack(require('./webpack.config')), {noInfo: true, quiet: true}));
 
 // Listen for connections on any open port & show the debug view.
-var listener = app.listen(function() {
+var port = options.port || (options.remote ? DEFAULT_REMOTE_PORT : 0);
+var listener = app.listen(port, function() {
   if (options.remote) {
     new RemoteConnectionHub().listen(app, listener, function(stream) {
       new BrowserDebugView().open(app, listener, stream);
