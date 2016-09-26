@@ -1,10 +1,11 @@
 var BrowserDebugView = require('./browser-debug-view');
+var RemoteConnectionHub = require('./remote-connection-hub');
 var commandLineArgs = require('command-line-args');
 var commandLineUsage = require('command-line-usage');
 var express = require('express');
 var expressWs = require('express-ws');
-var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpack = require('webpack');
+var webpackDevMiddleware = require('webpack-dev-middleware');
 
 var commandLineOptions = [
   {
@@ -44,8 +45,9 @@ app.use(webpackDevMiddleware(
 // Listen for connections on any open port & show the debug view.
 var listener = app.listen(function() {
   if (options.remote) {
-    console.error('--remote is not yet implemented...');
-    process.exit();
+    new RemoteConnectionHub().listen(app, listener, function(stream) {
+      new BrowserDebugView().open(app, listener, stream);
+    });
   } else {
     // Echo program's stdout to stdout.
     process.stdin.pipe(process.stdout);
