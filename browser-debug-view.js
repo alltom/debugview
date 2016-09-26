@@ -10,10 +10,13 @@ function BrowserDebugView() {
   this._lineStream = null;
   this._webSocket = null;
   this._socketPath = '/view' + (nextViewerId++);
+  this._disconnectCallback = null;
 }
 
 // Opens the debug view. Serves itself from the given Express app.
-BrowserDebugView.prototype.open = function(app, httpListener, logInputStream) {
+BrowserDebugView.prototype.open = function(
+    app, httpListener, logInputStream, disconnectCallback) {
+  this._disconnectCallback = disconnectCallback;
   this._setupStreamHandlers(logInputStream);
   this._setupExpressHandlers(app);
 
@@ -42,7 +45,11 @@ BrowserDebugView.prototype._setupStreamHandlers = function(logInputStream) {
 BrowserDebugView.prototype._setupExpressHandlers = function(app) {
   app.ws(this._socketPath, function(ws, req) {
     this._webSocket = ws;
-    this._webSocket.on('close', function() { process.exit(); });
+    this._webSocket.on('close', function() {
+      if (this._disconnectCallback) {
+        this._disconnectCallback();
+      }
+    }.bind(this));
     this._read();
   }.bind(this));
 };
