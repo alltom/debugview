@@ -56,6 +56,7 @@ app.use(webpackDevMiddleware(
 var port = options.port || (options.remote ? DEFAULT_REMOTE_PORT : 0);
 var listener = app.listen(port, function() {
   if (options.remote) {
+    // Listen for WebSocket connections, creating a new debug view for each one.
     new RemoteConnectionHub().listen(app, listener, function(stream) {
       new BrowserDebugView().open(app, listener, stream);
     });
