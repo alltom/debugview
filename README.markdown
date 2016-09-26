@@ -10,7 +10,7 @@ The idea is that you often use log statements while you're debugging, really lig
 
 debugview lets you add special commands to your log statements that give you easy access to a broader widget library:
 
-* **HTML.** Example (JavaScript): `console.log('<<<html <h2>Now the fun part...</h2> >>>')` adds a row to a table
+* **HTML.** Example (C): `printf("<<<html <h2>Now the fun part...</h2> >>>\n");` adds a row to a table
 * **(Aligned) Table.** Example (JavaScript): `console.log('<<<tr ' + fields.join('|') + '>>>')` adds a row to a table
 * **Bar chart.** Example (JavaScript): `console.log('<<<bar ' + value + '>>>')` adds a bar to a bar chart
 
