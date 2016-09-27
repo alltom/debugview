@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var BrowserDebugView = require('./browser-debug-view');
 var RemoteConnectionHub = require('./remote-connection-hub');
 var commandLineArgs = require('command-line-args');
