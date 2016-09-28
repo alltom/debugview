@@ -1,6 +1,6 @@
 Documentation
 
-Treat input as a stream and find <<<>>> anywhere in it.
+Treat input as a stream and find <<<>>> anywhere in it. Custom delimiters. The implementations of these are going to be related.
 
 Multiple tables, multiple graphs
 
