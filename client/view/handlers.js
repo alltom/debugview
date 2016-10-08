@@ -37,15 +37,20 @@ handlers.bar = function(logItem, env) {
   }
   barData.push(logItem.data);
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 40};
+  var margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: Math.min(
+        d3.max(barData, function(d) { return 8 + d.label.length * 6 }), 400)
+  };
 
   if (svg == null) {
     svg = d3.select(document.body)
               .append('svg')
               .attr('width', 960)
               .attr('height', 200);
-    var g = svg.append('g').attr(
-        'transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var g = svg.append('g');
   }
 
   svg.attr('height', barData.length * 15 + margin.top + margin.bottom);
@@ -56,6 +61,7 @@ handlers.bar = function(logItem, env) {
       y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
 
   var g = svg.select('g');
+  g.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   var data = barData;
 
