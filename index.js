@@ -6,6 +6,7 @@ var commandLineArgs = require('command-line-args');
 var commandLineUsage = require('command-line-usage');
 var express = require('express');
 var expressWs = require('express-ws');
+var path = require('path');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 
@@ -50,7 +51,7 @@ if (options.help) {
 // Create a web server.
 var app = express();
 expressWs(app);  // Handle WebSocket connections.
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(webpackDevMiddleware(
     webpack(require('./webpack.config')), {noInfo: true, quiet: true}));
 
