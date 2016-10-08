@@ -1,6 +1,6 @@
 {
   "name": "debugview",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Language-agnostic debugging widgets based on print statements",
   "keywords": [
     "debugging"
